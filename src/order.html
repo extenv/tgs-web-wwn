@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kwik Coffee - Halaman Utama</title>
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.28.0/feather.min.js"
+        integrity="sha512-7x3zila4t2qNycrtZ31HO0NnJr8kg2VI67YLoRSyi9hGhRN66FHYWr7Axa9Y1J9tGYHVBPqIjSE1ogHrJTz51g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+
+</head>
+
+<body>
+    <header class="sticky top-0 bg-white shadow z-50">
+        <div class="container flex flex-col sm:flex-row justify-between items-center mx-auto py-4 px-8">
+            <a href="/src//index.html">
+                <div class="flex items-center text-2xl">
+                    <div class="w-12 mr-3">
+                        <img src="./assets/icon.jpg" class="rounded-md" alt="">
+                    </div>Kwik Coffee
+                </div>
+            </a>
+            <div class="flex mt-4 sm:mt-0">
+                <a class="px-4" href="#">Beranda</a>
+                <a class="px-4" href="#features">Keunggulan</a>
+                <a class="px-4" href="#product">Produk</a>
+                <a class="px-4" href="#testimonials">Testimoni</a>
+            </div>
+            <div class="hidden md:block">
+                <button type="button"
+                    class=" py-3 px-8 text-sm bg-[#ff964d] hover:bg-[#ee8b44] rounded text-white ">Beli Sekarang
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="bg-white border rounded-lg px-8 py-6 mx-auto my-8 max-w-2xl">
+        <h2 class="text-2xl font-medium mb-4">Pemesanan</h2>
+        <form x-data="{
+            menuPrices: {
+                coffee_cheese_fun: 40000,
+                coffee_choco_blast: 39000,
+                coffee_peanut_choco: 35000,
+                coffee_original: 25000,
+                coffee_special_plus_i: 55000,
+                coffee_special_plus_ii: 80000
+            },
+            items: [{ name: '', menu: '', quantity: 1 }],
+            addItem() {
+                this.items.push({ name: '', menu: '', quantity: 1 });
+            },
+            removeItem(index) {
+                this.items.splice(index, 1);
+            },
+            get total() {
+                return this.items.reduce((sum, item) => {
+                    return sum + (this.menuPrices[item.menu] ? this.menuPrices[item.menu] * item.quantity : 0);
+                }, 0);
+            },
+            order() {
+                if (this.items.length > 0 && this.items.every(item => item.menu)) {
+                    alert('Pemesanan berhasil! Total pembayaran: Rp. ' + this.total.toLocaleString());
+                    this.items = [{name: '', menu: '', quantity: 1 }]; // Reset form data
+                } else {
+                    alert('Silakan pilih menu untuk memesan.');
+                }
+            }
+        }">
+            <div class="mb-4">
+                <label for="name" class="block text-gray-700 font-medium mb-2">Nama Pembeli</label>
+                <input type="text" x-model="item.name" id="name" name="name" placeholder="Isi nama kamu"
+                    class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
+                    required>
+            </div>
+
+            <div class="mb-4">
+
+                <label class="block text-gray-700 font-medium mb-2">Menu</label>
+
+                <template x-for="(item, index) in items" :key="index">
+                    <div class="flex items-center mb-2">
+                        <select x-model="item.menu"
+                            class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
+                            required>
+                            <option value="">Pilih Menu</option>
+                            <option value="coffee_cheese_fun">Kwik Coffee Cheese Fun Rp.40.000</option>
+                            <option value="coffee_choco_blast">Kwik Coffee Choco Blast Rp.39.000</option>
+                            <option value="coffee_peanut_choco">Kwik Coffee Peanut Choco Rp.35.000</option>
+                            <option value="coffee_original">Kwik Coffee Original Rp.25.000</option>
+                            <option value="coffee_special_plus_i">Kwik Coffee Special Plus I Rp.55.000</option>
+                            <option value="coffee_special_plus_ii">Kwik Coffee Special Plus II Rp.80.000</option>
+                        </select>
+
+                        <input type="number" x-model.number="item.quantity"
+                            class="border border-gray-400 p-2 w-20 rounded-lg focus:outline-none focus:border-blue-400 ml-2"
+                            min="1" required>
+
+                        <button type="button" @click="removeItem(index)"
+                            class="ml-2 text-red-500 hover:text-red-700">Remove</button>
+                    </div>
+                </template>
+
+                <button type="button" @click="addItem()" class="mt-2 bg-blue-500 text-white py-2 px-4 rounded">Add
+                    Menu</button>
+
+                <div class="mt-4">
+                    <label class="block text-gray-700 font-medium mb-2">Total Pembayaran</label>
+                    <span class="text-lg font-semibold" x-text="'Rp. ' + total.toLocaleString()"></span>
+                </div>
+            </div>
+
+
+            <div class="mb-4">
+                <label for="message" class="block text-gray-700 font-medium mb-2">Catatan Pembeli</label>
+                <textarea id="message" name="message"
+                    class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
+                    rows="5"></textarea>
+            </div>
+            <div>
+                <button type="submit" @click="order()"
+                    class="bg-[#ff964d] text-white px-4 py-2 rounded-lg hover:bg-[#ee8b44]">Pesan Kwik
+                    Coffee</button>
+            </div>
+
+        </form>
+    </div>
+
+</body>
+
+</html>
